@@ -1,0 +1,55 @@
+﻿@using System.Linq
+@inject xcom2ConsoleCheats.ViewModels.ListCheatsViewModel VM
+
+<ContentView>
+    <StackLayout>
+        <Label Text="XCom 2 Console Cheats"
+               FontSize="30"
+               FontAttributes="FontAttributes.Bold"
+               HorizontalOptions="LayoutOptions.Center" />
+
+        <Button Text="All sections" OnClick="@(() => LoadContent(0))" />
+        @if (fullMenu != null)
+        {
+            @foreach (var section in fullMenu)
+            {
+                <Button Text="@section.Title" OnClick="@(() => LoadContent(section.Id))" />
+            }
+        }
+    </StackLayout>
+</ContentView>
+
+@code {
+    public Microsoft.MobileBlazorBindings.Elements.ScrollView _ScrollView;
+    private IReadOnlyList<xcom2ConsoleCheats.Models.CheatSection> fullMenu;
+    private Xamarin.Forms.MasterDetailPage _root;
+
+    public async void ScrollToTop()
+    {
+        await _ScrollView.NativeControl.ScrollToAsync(0, 0, true);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        fullMenu = await VM.GetAllCheatSectionsAsync();
+    }
+
+    protected void LoadContent(long sectionId = 0)
+    {
+        List<xcom2ConsoleCheats.Models.CheatSection> cheatEntries;
+        if (sectionId > 0)
+            cheatEntries = fullMenu.Where(x => x.Id == sectionId).ToList();
+        else
+            cheatEntries = fullMenu.ToList();
+
+        VM.ChangeSelectedEntries(cheatEntries);
+        GetRoot().IsPresented = false;
+    }
+
+    private Xamarin.Forms.MasterDetailPage GetRoot()
+    {
+        if (_root == null)
+            _root = App.Current.MainPage as Xamarin.Forms.MasterDetailPage;
+        return _root;
+    }
+}

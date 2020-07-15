@@ -1,16 +1,23 @@
 ﻿<Frame CornerRadius="10" BackgroundColor="Color.LightBlue">
 
-    <StackLayout Orientation="StackOrientation.Horizontal" HorizontalOptions="LayoutOptions.Center">
-
-        <Label Text="@Entry"
-               FontAttributes="FontAttributes.Bold"
-               VerticalTextAlignment="TextAlignment.Center" />
-
-        <Label Text="@Desc"
-               FontAttributes="FontAttributes.Bold"
-               VerticalTextAlignment="TextAlignment.Center" />
-
-    </StackLayout>
+    <Grid>
+        <Layout>
+            <ColumnDefinition GridUnitType="GridUnitType.Absolute" Width="160" />
+            <ColumnDefinition GridUnitType="GridUnitType.Star" />
+        </Layout>
+        <Contents>
+            <GridCell Column="0">
+                <Label Text="@Entry"
+                       FontAttributes="FontAttributes.Bold"
+                       VerticalTextAlignment="TextAlignment.Center" />
+            </GridCell>
+            <GridCell Column="1">
+                <Label Text="@Desc"
+                       FontAttributes="FontAttributes.Bold"
+                       VerticalTextAlignment="TextAlignment.Center" />
+            </GridCell>
+        </Contents>
+    </Grid>
 
 </Frame>
 

@@ -17,12 +17,23 @@ namespace xcom2ConsoleCheats
                 {
                     // Register app-specific services
                     //services.AddSingleton<AppState>();
-                    services.AddTransient<ListCheatsViewModel>();
+                    services.AddSingleton<ListCheatsViewModel>();
                 })
                 .Build();
 
-            MainPage = new ContentPage();
-            host.AddComponent<HelloWorld>(parent: MainPage);
+            var mdp = new MasterDetailPage
+            {
+                Master = new ContentPage
+                {
+                    Title = "XCOM 2 Console Cheats"
+                },
+                Detail = new ContentPage(),
+                MasterBehavior = MasterBehavior.Popover
+        };
+            MainPage = mdp;
+
+            host.AddComponent<HelloWorld>(parent: mdp.Detail);
+            host.AddComponent<ListCheatSections>(parent: mdp.Master);
         }
 
         protected override void OnStart()

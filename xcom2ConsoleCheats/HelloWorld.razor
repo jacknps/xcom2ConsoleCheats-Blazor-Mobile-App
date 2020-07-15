@@ -1,0 +1,49 @@
+﻿@inject xcom2ConsoleCheats.ViewModels.ListCheatsViewModel VM
+
+<ContentView>
+    <Grid Margin="new Thickness(20)">
+        <Layout>
+            <RowDefinition GridUnitType="GridUnitType.Star" />
+            <RowDefinition GridUnitType="GridUnitType.Absolute" Height="50" />
+        </Layout>
+        <Contents>
+            <GridCell Row="0">
+                <ScrollView @ref="_ScrollView">
+                    <StackLayout>
+                        <Label Text="Cheat codes:"
+                               FontSize="40" />
+
+                        @if (cheatEntries != null)
+                        {
+                            @foreach (var cheatEntry in cheatEntries)
+                            {
+                                <CheatEntry Entry="@cheatEntry.Cheat" Desc="@cheatEntry.Description" />
+                            }
+                        }
+
+                    </StackLayout>
+                </ScrollView>
+            </GridCell>
+            <GridCell Row="1">
+                <Button BackgroundColor="Color.Orange" TextColor="Color.Purple" Text="Up" OnClick="@(async () => ScrollToTop())"
+                        FontSize="36" />
+            </GridCell>
+        </Contents>
+    </Grid>
+</ContentView>
+
+@code {
+    public Microsoft.MobileBlazorBindings.Elements.ScrollView _ScrollView;
+    public double ScrollValue { get; set; }
+    private IReadOnlyList<xcom2ConsoleCheats.Models.CheatEntryModel> cheatEntries;
+
+    public async void ScrollToTop()
+    {
+        await _ScrollView.NativeControl.ScrollToAsync(0, 0, true);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        cheatEntries = await VM.GetAllCheatEntriesAsync();
+    }
+}
